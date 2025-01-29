@@ -172,3 +172,6 @@ tests/*/videos
 
 # GQL SDL generated for the frontends
 gql-gen/
+
+# Database
+db/

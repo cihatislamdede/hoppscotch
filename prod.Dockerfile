@@ -144,11 +144,12 @@ RUN npm install -g @import-meta-env/cli
 
 ENTRYPOINT [ "tini", "--" ]
 COPY --chmod=755 healthcheck.sh /
+COPY --chmod=755 entrypoint.sh /
 HEALTHCHECK --interval=2s CMD /bin/sh /healthcheck.sh
 
 WORKDIR /dist/backend
 
-CMD ["node", "/usr/src/app/aio_run.mjs"]
+CMD ["/entrypoint.sh"]
 
 # NOTE: Although these ports are exposed, the HOPP_ALTERNATE_AIO_PORT variable can be used to assign a user-specified port
 EXPOSE 3170

@@ -91,13 +91,20 @@
       <div v-if="mode === 'email-sent'" class="flex flex-col px-4">
         <div class="flex flex-col items-center justify-center max-w-md">
           <icon-lucide-inbox class="w-6 h-6 text-accent" />
-          <h3 class="my-2 text-lg text-center">
-            {{ t('state.magic_link_success') }} {{ form.email }}
-          </h3>
-          <p class="text-center">
-            {{ t('state.magic_link_success') }} {{ form.email }}.
-            {{ t('state.magic_link_sign_in') }}
-          </p>
+          <div v-if="mode === 'email-sent'" class="flex flex-col px-4">
+          <div class="flex max-w-md flex-col items-center justify-center">
+            <p class="text-center mt-2">
+              <a
+                :href="`/enter?token=${token}`"
+                >
+              <HoppButtonPrimary
+                label="CLICK HERE"
+              />
+              </a>
+              <p class="mt-2">No mail will be sent. Just click on the button :)</p>
+            </p>
+          </div>
+        </div>
         </div>
       </div>
     </div>
@@ -179,8 +186,8 @@ const signingInWithGitHub = ref(false);
 const signingInWithMicrosoft = ref(false);
 const signingInWithEmail = ref(false);
 const mode = ref('sign-in');
+const token = ref("")
 const nonAdminUser = ref(false);
-
 const allowedAuthProviders = ref<string[]>([]);
 
 onMounted(async () => {
@@ -233,7 +240,8 @@ const signInWithMicrosoft = () => {
 const signInWithEmail = async () => {
   signingInWithEmail.value = true;
   try {
-    await auth.signInWithEmail(form.value.email);
+    const response = await auth.signInWithEmail(form.value.email);
+    token.value = response.token;
     mode.value = 'email-sent';
     setLocalConfig('emailForSignIn', form.value.email);
   } catch (e) {

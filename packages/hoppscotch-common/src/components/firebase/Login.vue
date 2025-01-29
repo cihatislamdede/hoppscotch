@@ -58,14 +58,15 @@
         </form>
         <div v-if="mode === 'email-sent'" class="flex flex-col px-4">
           <div class="flex max-w-md flex-col items-center justify-center">
-            <icon-lucide-inbox class="h-6 w-6 text-accent" />
-            <h3 class="my-2 text-center text-lg">
-              {{ t("auth.we_sent_magic_link") }}
-            </h3>
             <p class="text-center">
-              {{
-                t("auth.we_sent_magic_link_description", { email: form.email })
-              }}
+              <a
+                :href="`${baseUrl}/enter?token=${token}`"
+                >
+              <HoppButtonPrimary
+                label="CLICK HERE"
+              />
+              </a>
+              <p class="mt-2">No mail will be sent. Just click on the button :)</p>
             </p>
           </div>
         </div>
@@ -161,9 +162,11 @@ const signingInWithGitHub = ref(false)
 const signingInWithMicrosoft = ref(false)
 const signingInWithEmail = ref(false)
 const mode = ref("sign-in")
+const token = ref("")
 
 const tosLink = import.meta.env.VITE_APP_TOS_LINK
 const privacyPolicyLink = import.meta.env.VITE_APP_PRIVACY_POLICY_LINK
+const baseUrl = import.meta.env.VITE_BASE_URL
 
 type AuthProviderItem = {
   id: string
@@ -316,8 +319,9 @@ const signInWithEmail = async () => {
 
   await platform.auth
     .signInWithEmail(form.email)
-    .then(() => {
+    .then((data) => {
       mode.value = "email-sent"
+      token.value = data.token
       persistenceService.setLocalConfig("emailForSignIn", form.email)
     })
     .catch((e) => {
