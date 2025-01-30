@@ -47,10 +47,10 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-  mailcatcher:
-    container_name: mailcatcher
-    image: dockage/mailcatcher:0.9.0
-    restart: always
-    ports:
-      - "1080:1080"
-      - "1025:1025"
+  # mailcatcher:
+  #   container_name: mailcatcher
+  #   image: dockage/mailcatcher:0.9.0
+  #   restart: always
+  #   ports:
+  #     - "1080:1080"
+  #     - "1025:1025"
