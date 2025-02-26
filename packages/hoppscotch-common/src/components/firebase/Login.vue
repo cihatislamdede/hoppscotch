@@ -49,25 +49,31 @@
             :label="t('auth.email')"
             input-styles="floating-input"
           />
+          <HoppSmartInput
+            v-model="form.password"
+            type="password"
+            placeholder=" "
+            :label="t('authorization.password')"
+            input-styles="floating-input"
+          />
 
           <HoppButtonPrimary
             :loading="signingInWithEmail"
             type="submit"
-            :label="`${t('auth.send_magic_link')}`"
+            :label="t('auth.login')"
           />
         </form>
         <div v-if="mode === 'email-sent'" class="flex flex-col px-4">
           <div class="flex max-w-md flex-col items-center justify-center">
-            <p class="text-center">
-              <a
-                :href="`${baseUrl}/enter?token=${token}`"
+            <div class="text-center">
+              <a :href="`${baseUrl}/enter?token=${token}`">
                 >
-              <HoppButtonPrimary
-                label="CLICK HERE"
-              />
+                <HoppButtonPrimary label="CLICK HERE" />
               </a>
-              <p class="mt-2">No mail will be sent. Just click on the button :)</p>
-            </p>
+              <p class="mt-2">
+                No mail will be sent. Just click on the button :)
+              </p>
+            </div>
           </div>
         </div>
       </template>
@@ -153,6 +159,7 @@ const persistenceService = useService(PersistenceService)
 
 const form = {
   email: "",
+  password: ""
 }
 
 const isLoadingAllowedAuthProviders = ref(true)
@@ -318,7 +325,7 @@ const signInWithEmail = async () => {
   signingInWithEmail.value = true
 
   await platform.auth
-    .signInWithEmail(form.email)
+    .signInWithEmail(form.email, form.password)
     .then((data) => {
       mode.value = "email-sent"
       token.value = data.token

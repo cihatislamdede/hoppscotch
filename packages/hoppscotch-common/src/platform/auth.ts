@@ -176,7 +176,7 @@ export type AuthPlatformDef = {
    * @param email The email that is logging in.
    * @returns An empty promise that is resolved when the operation is complete
    */
-  signInWithEmail: (email: string) => Promise<void>
+  signInWithEmail: (email: string, password: string) => Promise<void>
 
   /**
    * Check whether a given link is a valid sign in with email, magic link response url.

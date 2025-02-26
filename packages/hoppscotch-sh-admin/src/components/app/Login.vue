@@ -68,7 +68,7 @@
         <HoppButtonPrimary
           :loading="signingInWithEmail"
           type="submit"
-          :label="t('state.send_magic_link')"
+          :label="t('auth.login')"
         />
       </form>
       <div v-if="!allowedAuthProviders">

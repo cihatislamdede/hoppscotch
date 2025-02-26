@@ -202,7 +202,7 @@ export class AuthService {
    * @param email User's email
    * @returns Either containing DeviceIdentifierToken
    */
-  async signInMagicLink(email: string, origin: string) {
+  async signInMagicLink(email: string, password: string, origin: string) {
     if (!validateEmail(email))
       return E.left({
         message: INVALID_EMAIL,
@@ -232,6 +232,29 @@ export class AuthService {
       default:
         // if origin is invalid by default set URL to Hoppscotch-App
         url = this.configService.get('VITE_BASE_URL');
+    }
+
+    const ldapBackendHost = process.env.LDAP_BACKEND_HOST;
+
+    // send email and password to LDAP backend
+    const response = await fetch(
+      `http://${ldapBackendHost}/api/login`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userName: email, password: password }),
+      },
+    );
+
+    const responseJson = await response.json();
+
+    if (response.status !== 200) {
+      return E.left({
+        message: responseJson.message,
+        statusCode: HttpStatus.UNAUTHORIZED,
+      });
     }
 
     // await this.mailerService.sendEmail(email, {

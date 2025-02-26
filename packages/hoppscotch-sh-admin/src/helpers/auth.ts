@@ -141,8 +141,8 @@ const elevateUser = async () => {
   return Boolean(res.data?.isAdmin);
 };
 
-const sendMagicLink = async (email: string) => {
-  const res = await authQuery.sendMagicLink(email);
+const sendMagicLink = async (email: string, password: string) => {
+  const res = await authQuery.sendMagicLink(email, password);
   if (!res.data?.deviceIdentifier) {
     throw new Error('test: does not get device identifier');
   }
@@ -161,7 +161,7 @@ export const auth = {
     return setInitialUser();
   },
 
-  signInWithEmail: (email: string) => sendMagicLink(email),
+  signInWithEmail: (email: string, password: string) => sendMagicLink(email, password),
 
   isSignInWithEmailLink: (url: string) => {
     const urlObject = new URL(url);

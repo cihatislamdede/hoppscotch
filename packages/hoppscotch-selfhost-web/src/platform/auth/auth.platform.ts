@@ -170,11 +170,12 @@ async function refreshToken() {
   }
 }
 
-async function sendMagicLink(email: string) {
+async function sendMagicLink(email: string, password: string) {
   const res = await axios.post(
     `${import.meta.env.VITE_BACKEND_API_URL}/auth/signin`,
     {
       email,
+      password,
     },
     {
       withCredentials: true,
@@ -270,8 +271,8 @@ export const def: AuthPlatformDef = {
     })
   },
 
-  async signInWithEmail(email: string) {
-    return await sendMagicLink(email)
+  async signInWithEmail(email: string, password: string) {
+    return await sendMagicLink(email, password)
   },
 
   isSignInWithEmailLink(url: string) {

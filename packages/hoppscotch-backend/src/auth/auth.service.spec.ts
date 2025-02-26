@@ -87,7 +87,11 @@ const encodedRefreshToken =
 
 describe('signInMagicLink', () => {
   test('Should throw error if email is not in valid format', async () => {
-    const result = await authService.signInMagicLink('bbbgmail.com', 'admin');
+    const result = await authService.signInMagicLink(
+      'bbbgmail.com',
+      'test',
+      'admin',
+    );
     expect(result).toEqualLeft({
       message: INVALID_EMAIL,
       statusCode: HttpStatus.BAD_REQUEST,
@@ -106,6 +110,7 @@ describe('signInMagicLink', () => {
 
     const result = await authService.signInMagicLink(
       'dwight@dundermifflin.com',
+      '123',
       'admin',
     );
     expect(result).toEqualRight({
@@ -121,6 +126,7 @@ describe('signInMagicLink', () => {
 
     const result = await authService.signInMagicLink(
       'dwight@dundermifflin.com',
+      '123',
       'admin',
     );
     expect(result).toEqualRight({

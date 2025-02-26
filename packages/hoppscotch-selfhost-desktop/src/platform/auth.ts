@@ -174,11 +174,11 @@ async function refreshToken() {
   }
 }
 
-async function sendMagicLink(email: string) {
+async function sendMagicLink(email: string, password: string) {
   const client = await getClient();
   let url = `${import.meta.env.VITE_BACKEND_API_URL}/auth/signin?origin=desktop`;
 
-  const res = await client.post(url, Body.json({ email }));
+  const res = await client.post(url, Body.json({ email, password }));
 
   if (res.data && res.data.deviceIdentifier) {
     persistenceService.setLocalConfig("deviceIdentifier", res.data.deviceIdentifier)
@@ -309,8 +309,8 @@ export const def: AuthPlatformDef = {
     })
   },
 
-  async signInWithEmail(email: string) {
-    await sendMagicLink(email)
+  async signInWithEmail(email: string, password: string) {
+    await sendMagicLink(email, password)
   },
 
   async verifyEmailAddress() {

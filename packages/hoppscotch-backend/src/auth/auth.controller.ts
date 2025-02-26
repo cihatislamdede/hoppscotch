@@ -63,6 +63,7 @@ export class AuthController {
 
     const deviceIdToken = await this.authService.signInMagicLink(
       authData.email,
+      authData.password,
       origin,
     );
     if (E.isLeft(deviceIdToken)) throwHTTPErr(deviceIdToken.left);
