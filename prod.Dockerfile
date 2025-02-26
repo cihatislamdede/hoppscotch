@@ -197,16 +197,15 @@ COPY --from=sh_admin_builder /usr/src/app/packages/hoppscotch-sh-admin/dist-subp
 COPY aio-multiport-setup.Caddyfile /etc/caddy/aio-multiport-setup.Caddyfile
 COPY aio-subpath-access.Caddyfile /etc/caddy/aio-subpath-access.Caddyfile
 
-RUN npm install -g @import-meta-env/cli
+RUN npm install -g @import-meta-env/cli prisma@5.20.0
 
-ENTRYPOINT [ "tini", "--" ]
 COPY --chmod=755 healthcheck.sh /
 COPY --chmod=755 entrypoint.sh /
 HEALTHCHECK --interval=2s CMD /bin/sh /healthcheck.sh
 
 WORKDIR /dist/backend
 
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
 
 # NOTE: Although these ports are exposed, the HOPP_ALTERNATE_AIO_PORT variable can be used to assign a user-specified port
 EXPOSE 3170
